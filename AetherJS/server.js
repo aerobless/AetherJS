@@ -20,7 +20,6 @@ app.use(express.cookieParser());
 app.use(express.session({secret: '223454354350AETHER'}));
 app.use(app.router);
 
-
 //Configure the server to use the client-folder:
 //app.set('client', __dirname+'/client');
 app.configure(function() {
@@ -34,16 +33,16 @@ app.use('/', express.static(__dirname + '/client/'));
 io = io.listen(app.listen(process.env.PORT || 4730));
 
 io.sockets.on('connection', function (socket) {
-    console.log("ddd");
     setInterval(function () {
         socket.emit('message', { action: 'sendPositionUpdate' });
-        console.log("test");
     }, 1000);
     socket.emit('message', { action: 'connected' });
+
+    socket.on('status update', function (msg) {
+        console.log(msg);
+    });
 });
 
 io.sockets.on('disconnect', function (socket) {
     socket.emit('message', { action: 'disconnect' });
 });
-/*
-*/

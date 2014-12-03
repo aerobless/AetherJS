@@ -96,11 +96,12 @@ scene.add( controls.getObject() );
 //Setup socket.io
 var socket = io();
 socket.on('message', function(msg){
+    socket.emit('test', 'test');
     if (msg.action === "sendPositionUpdate") {
         scene.updateMatrixWorld(true);
         var position = new THREE.Vector3();
-        position.getPositionFromMatrix(camera.matrixWorld);
-        console.log(position.x + ',' + position.y + ',' + position.z);
+        position.setFromMatrixPosition(camera.matrixWorld);
+        socket.emit('status update', "ddd"+position.x + ',' + position.y + ',' + position.z);
     }
 });
 
